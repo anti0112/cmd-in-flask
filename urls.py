@@ -1,4 +1,7 @@
-def get_query(cmd, val, file_list):
+import re
+from typing import Iterator, List, Any
+
+def get_query(cmd: str, val: str, file_list: Iterator)-> List[Any]:
     if cmd == "filter":
         res = [x for x in file_list if val in x]
         return res
@@ -17,6 +20,12 @@ def get_query(cmd, val, file_list):
         return res
         
     if cmd == "limit":
-        val = int(val)
-        res = list(file_list)[:val]
+        res = list(file_list)[:int(val)]
         return res
+    
+    if cmd == "regex":
+        reg = re.compile(val)
+        res = list(filter(lambda x: reg.search(x), file_list))
+        return res
+    return []
+    
